@@ -8,6 +8,7 @@ RUN apt-get update && \
         git \
         openssl \
         libssl-dev \
+        curl \
         pkg-config
 
 RUN git clone https://github.com/salesforce/p4-fusion.git
