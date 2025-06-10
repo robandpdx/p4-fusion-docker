@@ -45,5 +45,6 @@ jobs:
           push: true
           labels: |
             org.opencontainers.image.source=${{github.server_url}}/${{github.repository}}
-            org.opencontainers.image.description=https://github.com/robandpdx/runner/releases/tag/v${{ github.event.inputs.version }}
+            org.opencontainers.image.description=https://github.com/salesforce/p4-fusion
             org.opencontainers.image.licenses=BSD-3-Clause
+          platforms: linux/amd64,linux/arm64
