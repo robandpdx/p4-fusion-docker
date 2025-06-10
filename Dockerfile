@@ -17,6 +17,9 @@ RUN tar zxf p4api-glibc2.3-openssl3.tgz
 RUN mkdir -p p4-fusion/vendor/helix-core-api/linux
 RUN mv p4api-2024.1.2724731/* p4-fusion/vendor/helix-core-api/linux/
 
+RUN curl -o /bin/p4 https://cdist2.perforce.com/perforce/r24.1/bin.linux26x86_64/p4
+RUN chmod +x /bin/p4
+
 WORKDIR /p4-fusion
 RUN ./generate_cache.sh Debug && ./build.sh
 
