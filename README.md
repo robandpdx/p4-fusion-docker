@@ -1,15 +1,27 @@
 # p4-fusion-docker
 
-This repo contains a docker image of [p4-fusion](https://github.com/salesforce/p4-fusion). You can use the docker image with the following command:
-```
-docker run -it ghcr.io/robandpdx/p4-fusion:latest /bin/bash
+This repo contains a docker image of [p4-fusion](https://github.com/salesforce/p4-fusion). 
+
+First, set the following environment variables:
+```bash
+export P4PORT=""
+export P4USER=""
+export P4CLIENT=""
 ```
 
-Once in the docker container, set the following environment variables:
+Next, create a direcotry for the converted git repo:
+```bash
+mkdir clones
 ```
-export P4USER=""
-export P4PORT=""
-export P4CLIENT=""
+
+Then, run the docker image with the following command:
+```bash
+docker run -it \
+    -e P4PRORT=$P4PORT \
+    -e P4USER=$P4USER \
+    -e P4CLIENT=$P4CLIENT \
+    -v $(pwd)/clones:/p4-fusion/clones \
+    ghcr.io/robandpdx/p4-fusion:latest /bin/bash
 ```
 
 Then run `p4 trust` to accept your server's ssl cert. Then run `p4 client` and input your password. Then you can run p4-fusion as described in the [readme](https://github.com/salesforce/p4-fusion).
