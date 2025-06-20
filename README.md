@@ -3,7 +3,7 @@
 This repo contains a docker image of [p4-fusion](https://github.com/salesforce/p4-fusion). 
 
 ## Prerequisites
-You must have p4 locally installed, and have run `p4trust` and 'p4login` previously.
+You must have p4 locally installed, and have run `p4trust` and `p4login` previously. To use the `mass-convert.sh` script you will need to have [`jq`](https://jqlang.org/) installed.
 
 ## Usage
 First, set the following environment variables:
@@ -43,8 +43,14 @@ docker run -it -u $(id -u):$(id -g) \
         --lookAhead 1000 \
         --retries 10 \
         --refresh 100 \
+        --includeBinaries \
         --branch main \
         --branch release-1
 ```
 If your local use is not `ubuntu` you'll need to modify the bind mounts in the command above to match the expected home directory of your user inside the container.  
 For usage of the `p4-fusion` command above, refer to the project's [readme](https://github.com/salesforce/p4-fusion).
+
+## Mass conversion of multiple p4 depots
+Included in this repository is a script, `mass-convert.sh`, to mass convert multiple p4 depots to git. The script will read a `config.json` file. This config file should have a list of depots with branches configured for each depot. See the [sample config.json file](./config.json.sample) and the structure should be pretty self explanetory.  
+
+After running `mass-convert.sh` successfully, you should have git clones in the `./clones` directory that are ready to push up to GitHub. You may need to [migrate binaries to LFS](https://gist.github.com/robandpdx/276a3f4d77f5a92c84562ab3f49051cd) or remove binaries using [git-filter-repo](https://github.com/newren/git-filter-repo) before pushing up to Github.  
