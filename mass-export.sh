@@ -1,6 +1,17 @@
 #!/bin/bash
 # This script will read the config.json and convert the p4 depots and branches to git
 
+# if the clones directory does not exist, create it
+if [ ! -d "bare-clones" ]; then
+    echo "Creating bare-clones directory..."
+    mkdir bare-clones
+fi
+
+if [ ! -d "clones" ]; then
+    echo "Creating clones directory..."
+    mkdir clones
+fi
+
 jq -c '.[]' config.json | while read -r depot; do
     DEPOT_PATH=$(echo "$depot" | jq -r '.depotPath')
     echo "Processing depot path: $DEPOT_PATH"
@@ -48,4 +59,14 @@ jq -c '.[]' config.json | while read -r depot; do
         --refresh 100 \
         $BRANCH_INCLUDE
 
+    # Create a clone from the bare clone
+    cd clones
+    git clone ../bare-clones/$DEPOT_NAME.git $DEPOT_NAME
+    # make all the branches from the refs
+    for REF in $(git for-each-ref --format='%(refname)' refs/remotes/origin/ | grep -v master | grep -v HEAD); do
+        BRANCH_NAME=${REF#refs/remotes/origin/}
+        git branch --track ${BRANCH_NAME} ${REF}
+    done
+
 done
+
