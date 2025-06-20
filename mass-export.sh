@@ -36,7 +36,7 @@ jq -c '.[]' config.json | while read -r depot; do
         fi
     done
     echo "Branch include options: $BRANCH_INCLUDE"
-    
+
     # Run the p4-fusion command inside the Docker container
     docker run -u $(id -u):$(id -g) \
     -e P4PORT=$P4PORT \
@@ -68,6 +68,7 @@ jq -c '.[]' config.json | while read -r depot; do
         BRANCH_NAME=${REF#refs/remotes/origin/}
         git branch --track ${BRANCH_NAME} ${REF}
     done
+    cd -
 
 done
 
