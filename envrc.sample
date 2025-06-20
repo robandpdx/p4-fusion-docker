@@ -1,0 +1,7 @@
+export P4USER=""
+export P4CLIENT=""
+export P4PORT=""
+export P4TICKETS="$HOME/.p4tickets"
+export P4TRUST="$HOME/.p4trust"
+export P4ENVIRO="$HOME/.p4enviro"
+
