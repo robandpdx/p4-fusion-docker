@@ -29,11 +29,7 @@ jq -c '.[]' config.json | while read -r depot; do
         echo "Processing branch: $branch_name for depot: $DEPOT_PATH"
 
         # Here we update the BRANCH_INCLUDE variable to include the branch name
-        if [ -z "$BRANCH_INCLUDE" ]; then
-            BRANCH_INCLUDE="--branch $branch_name"
-        else
-            BRANCH_INCLUDE="$BRANCH_INCLUDE --branch $branch_name"
-        fi
+        BRANCH_INCLUDE="$BRANCH_INCLUDE --branch $branch_name"
     done
     echo "Branch include options: $BRANCH_INCLUDE"
 
