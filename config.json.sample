@@ -1,0 +1,24 @@
+[
+    {
+        "depotPath": "//gl-exporter/...",
+        "branchConfig": [
+            {
+                "branch": "main"
+            },
+            {
+                "branch": "release-1"
+            }
+        ]
+    },
+    {
+        "depotPath": "//gh-gei/...",
+        "branchConfig": [
+            {
+                "branch": "main"
+            },
+            {
+                "branch": "v1.0.0"
+            }
+        ]
+    }
+]
