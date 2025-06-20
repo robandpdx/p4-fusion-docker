@@ -35,7 +35,8 @@ jq -c '.[]' config.json | while read -r depot; do
             BRANCH_INCLUDE="$BRANCH_INCLUDE --branch $branch_name"
         fi
     done
-
+    echo "Branch include options: $BRANCH_INCLUDE"
+    
     # Run the p4-fusion command inside the Docker container
     docker run -u $(id -u):$(id -g) \
     -e P4PORT=$P4PORT \
