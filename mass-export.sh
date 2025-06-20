@@ -61,7 +61,7 @@ jq -c '.[]' config.json | while read -r depot; do
     git clone ../bare-clones/$DEPOT_NAME.git $DEPOT_NAME
     # make all the branches from the refs
     cd $DEPOT_NAME
-    for REF in $(git for-each-ref --format='%(refname)' refs/remotes/origin/ | grep -v main |grep -v master | grep -v HEAD); do
+    for REF in $(git for-each-ref --format='%(refname)' refs/remotes/origin/ | grep -v HEAD); do
         BRANCH_NAME=${REF#refs/remotes/origin/}
         git branch --track ${BRANCH_NAME} ${REF}
     done
