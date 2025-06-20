@@ -23,12 +23,12 @@ jq -c '.[]' config.json | while read -r depot; do
 
     BRANCH_INCLUDE=""
 
-    # Iterate over each branch in the branchConfig array for this depot
-    echo "$depot" | jq -c '.branchConfig[]' | while read -r branch_config; do
-        branch_name=$(echo "$branch_config" | jq -r '.branch')
+    # Get all branches for this depot
+    BRANCHES=$(echo "$depot" | jq -r '.branchConfig[].branch')
+    
+    # Build the BRANCH_INCLUDE string
+    for branch_name in $BRANCHES; do
         echo "Processing branch: $branch_name for depot: $DEPOT_PATH"
-
-        # Here we update the BRANCH_INCLUDE variable to include the branch name
         BRANCH_INCLUDE="$BRANCH_INCLUDE --branch $branch_name"
     done
     echo "Branch include options: $BRANCH_INCLUDE"
