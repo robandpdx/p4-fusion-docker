@@ -54,7 +54,7 @@ jq -c '.[]' config.json | while read -r depot; do
         --lookAhead 1000 \
         --retries 10 \
         --refresh 100 \
-        --includeBinaries \
+        --includeBinaries true \
         $BRANCH_INCLUDE
 
     # Create a clone from the bare clone
