@@ -43,7 +43,7 @@ docker run -it -u $(id -u):$(id -g) \
         --lookAhead 1000 \
         --retries 10 \
         --refresh 100 \
-        --includeBinaries \
+        --includeBinaries true \
         --branch main \
         --branch release-1
 ```
