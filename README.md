@@ -6,7 +6,7 @@ This repo contains a docker image of [p4-fusion](https://github.com/salesforce/p
 You must have p4 locally installed, and have run `p4trust` and `p4login` previously. To use the `mass-convert.sh` script you will need to have [`jq`](https://jqlang.org/) installed.
 
 ## Usage
-First, set the needed environment variables by copying the `.envrc.sample` file to `.envrc` and setting the following:
+First, set the needed environment variables by copying the `envrc.sample` file to `.envrc` and setting the following:
 ```bash
 export P4PORT=""
 export P4USER=""
