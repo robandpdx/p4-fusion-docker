@@ -5,3 +5,10 @@ export P4TICKETS="$HOME/.p4tickets"
 export P4TRUST="$HOME/.p4trust"
 export P4ENVIRO="$HOME/.p4enviro"
 
+# p4-fusion configuration
+export NETWORK_THREADS=20
+export PRINT_BATCH=100
+export LOOKAHEAD=1000
+export RETRIES=10
+export REFRESH=100
+export INCLUDE_BINARIES=true

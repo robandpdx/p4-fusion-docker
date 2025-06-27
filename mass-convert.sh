@@ -35,9 +35,6 @@ jq -c '.[]' config.json | while read -r depot; do
 
     # Run the p4-fusion command inside the Docker container
     docker run -u $(id -u):$(id -g) \
-    -e P4PORT=$P4PORT \
-    -e P4USER=$P4USER \
-    -e P4CLIENT=$P4CLIENT \
     -v $(pwd)/bare-clones:/p4-fusion/bare-clones \
     --mount type=bind,source="$P4TICKETS",target=/home/ubuntu/.p4tickets,readonly \
     --mount type=bind,source="$P4TRUST",target=/home/ubuntu/.p4trust,readonly \
@@ -49,12 +46,12 @@ jq -c '.[]' config.json | while read -r depot; do
         --port "$P4PORT" \
         --client "$P4CLIENT" \
         --src bare-clones/$DEPOT_NAME.git \
-        --networkThreads 20 \
-        --printBatch 100 \
-        --lookAhead 1000 \
-        --retries 10 \
-        --refresh 100 \
-        --includeBinaries true \
+        --networkThreads $NETWORK_THREADS \
+        --printBatch $PRINT_BATCH \
+        --lookAhead $LOOKAHEAD \
+        --retries $RETRIES \
+        --refresh $REFRESH \
+        --includeBinaries $INCLUDE_BINARIES \
         $BRANCH_INCLUDE
 
     # Create a clone from the bare clone
@@ -66,6 +63,12 @@ jq -c '.[]' config.json | while read -r depot; do
         BRANCH_NAME=${REF#refs/remotes/origin/}
         git branch --track ${BRANCH_NAME} ${REF}
     done
+
+    # LFS migrate large objects
+    # The following extensions are included in the LFS migration:
+    # png, jpg, jpeg, gif, tiff, bmp, psd, tga, exr, mp4, mov, avi, mkv, flv, webm, jar, exe
+    git lfs migrate import --everything --include="*.[pP][nN][gG],*.[jJ][pP][gG],*.[jJ][pP][eE][gG],*.[gG][iI][fF],*.[tT][iI][fF][fF],*.[bB][mM][pP],*.[pP][sS][dD],*.[tT][gG][aA],*.[eE][xX][rR],*.[mM][pP]4,*.[mM][oO][vV],*.[aA][vV][iI],*.[mM][kK][vV],*.[fF][lL][vV],*.[wW][eE][bB][mM],*.[jJ][aA][rR],*.[eE][xX][eE]"
+    git lfs migrate info --everything
     cd ..
     cd ..
 
