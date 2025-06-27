@@ -51,7 +51,7 @@ docker run -it -u $(id -u):$(id -g) \
 If your local use is not `ubuntu` you'll need to modify the bind mounts in the command above to match the expected home directory of your user inside the container.  
 For usage of the `p4-fusion` command above, refer to the project's [readme](https://github.com/salesforce/p4-fusion).
 
-## Mass conversion of multiple p4 depots
+## Mass conversion of multiple p4 depots + LFS migration
 Included in this repository is a script, `mass-convert.sh`, to mass convert multiple p4 depots to git. The script will read a `config.json` file. This `config.json` file should have a list of depots with branches configured for each depot. You can also enable LFS migration in the `config.json` file. See the [sample config.json file](./config.json.sample) and the structure should be pretty self explanetory.  
 
 After running `mass-convert.sh` successfully, you should have git clones in the `./clones` directory that are ready to push up to GitHub.
