@@ -64,11 +64,43 @@ jq -c '.[]' config.json | while read -r depot; do
         git branch --track ${BRANCH_NAME} ${REF}
     done
 
-    # LFS migrate large objects
-    # The following extensions are included in the LFS migration:
-    # png, jpg, jpeg, gif, tiff, bmp, psd, tga, exr, mp4, mov, avi, mkv, flv, webm, jar, exe
-    git lfs migrate import --everything --include="*.[pP][nN][gG],*.[jJ][pP][gG],*.[jJ][pP][eE][gG],*.[gG][iI][fF],*.[tT][iI][fF][fF],*.[bB][mM][pP],*.[pP][sS][dD],*.[tT][gG][aA],*.[eE][xX][rR],*.[mM][pP]4,*.[mM][oO][vV],*.[aA][vV][iI],*.[mM][kK][vV],*.[fF][lL][vV],*.[wW][eE][bB][mM],*.[jJ][aA][rR],*.[eE][xX][eE]"
-    git lfs migrate info --everything
+    # Check if LFS is enabled for this depot
+    LFS_ENABLED=$(echo "$depot" | jq -r '.lfs')
+    if [ "$LFS_ENABLED" = "true" ]; then
+        echo "LFS is enabled for this depot. Processing LFS migration..."
+        
+        # Get the lfsTrack extensions from config
+        LFS_EXTENSIONS=$(echo "$depot" | jq -r '.lfsTrack[]')
+        
+        # Convert extensions to case-insensitive patterns
+        LFS_PATTERNS=""
+        for ext in $LFS_EXTENSIONS; do
+            # Remove the leading *. if present
+            ext_clean=$(echo "$ext" | sed 's/^\*\.//')
+            
+            # Convert each character to case-insensitive pattern
+            pattern="*."
+            for (( i=0; i<${#ext_clean}; i++ )); do
+                char="${ext_clean:$i:1}"
+                pattern="${pattern}[${char^^}${char,,}]"
+            done
+            
+            if [ -z "$LFS_PATTERNS" ]; then
+                LFS_PATTERNS="$pattern"
+            else
+                LFS_PATTERNS="$LFS_PATTERNS,$pattern"
+            fi
+        done
+        
+        echo "LFS patterns: $LFS_PATTERNS"
+        
+        # LFS migrate large objects
+        git lfs migrate import --everything --include="$LFS_PATTERNS"
+        git lfs migrate info --everything
+    else
+        echo "LFS is disabled for this depot. Skipping LFS migration."
+    fi
+    
     cd ..
     cd ..
 

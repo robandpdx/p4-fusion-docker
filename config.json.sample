@@ -8,6 +8,26 @@
             {
                 "branch": "release-1"
             }
+        ],
+        "lfs": true,
+        "lfsTrack": [
+            "*.png",
+            "*.jpg",
+            "*.jpeg",
+            "*.gif",
+            "*.tiff",
+            "*.bmp",
+            "*.psd",
+            "*.tga",
+            "*.expr",
+            "*.mp4",
+            "*.mov",
+            "*.avi",
+            "*.mkv",
+            "*.flv",
+            "*.webm",
+            "*.jar",
+            "*.exe"
         ]
     },
     {
@@ -19,6 +39,7 @@
             {
                 "branch": "v1.0.0"
             }
-        ]
+        ],
+        "lfs": false
     }
 ]
