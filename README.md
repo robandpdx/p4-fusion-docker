@@ -6,7 +6,7 @@ This repo contains a docker image of [p4-fusion](https://github.com/salesforce/p
 You must have p4 locally installed, and have run `p4trust` and `p4login` previously. To use the `mass-convert.sh` script you will need to have [`jq`](https://jqlang.org/) installed.
 
 ## Usage
-First, set the following environment variables:
+First, set the needed environment variables by copying the `.envrc.sample` file to `.envrc` and setting the following:
 ```bash
 export P4PORT=""
 export P4USER=""
@@ -15,6 +15,7 @@ export P4TICKETS=""
 export P4TRUST=""
 export P4ENVIRO=""
 ```
+I use [direnv](https://direnv.net/), but you can also source the `.envrc` file if you prefer.
 
 Next, create a direcotry for the converted git repo:
 ```bash
@@ -38,12 +39,12 @@ docker run -it -u $(id -u):$(id -g) \
         --port "$P4PORT" \
         --client "$P4CLIENT" \
         --src bare-clones/gl-exporter.git \
-        --networkThreads 20 \
-        --printBatch 100 \
-        --lookAhead 1000 \
-        --retries 10 \
-        --refresh 100 \
-        --includeBinaries true \
+        --networkThreads $NETWORK_THREADS \
+        --printBatch $PRINT_BATCH \
+        --lookAhead $LOOKAHEAD \
+        --retries $RETRIES \
+        --refresh $REFRESH \
+        --includeBinaries $INCLUDE_BINARIES \
         --branch main \
         --branch release-1
 ```
