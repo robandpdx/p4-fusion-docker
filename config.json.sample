@@ -1,6 +1,8 @@
 [
     {
         "depotPath": "//gl-exporter/...",
+        "githubRepoName": "gl-exporter",
+        "githubRepoVisibility": "private",
         "branchConfig": [
             {
                 "branch": "main"

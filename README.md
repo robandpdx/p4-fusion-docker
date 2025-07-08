@@ -52,6 +52,8 @@ If your local use is not `ubuntu` you'll need to modify the bind mounts in the c
 For usage of the `p4-fusion` command above, refer to the project's [readme](https://github.com/salesforce/p4-fusion).
 
 ## Mass conversion of multiple p4 depots + LFS migration
-Included in this repository is a script, `mass-convert.sh`, to mass convert multiple p4 depots to git. The script will read a `config.json` file. This `config.json` file should have a list of depots with branches configured for each depot. You can also enable LFS migration in the `config.json` file. See the [sample config.json file](./config.json.sample) and the structure should be pretty self explanetory.  
+Included in this repository is a script, `mass-convert.sh`, to mass convert multiple p4 depots to git. The script will read a `config.json` file. This `config.json` file should have a list of depots with branches configured for each depot. You can also enable LFS migration in the `config.json` file. See the [sample config.json file](./config.json.sample) and the structure should be pretty self explanetory. The first branch cofigured in the `branchConfig` list will be considered the main branch of the repository.  
+
+If you have `githubRepoName` defined, the script will create the repository in Github and push it up.
 
 After running `mass-convert.sh` successfully, you should have git clones in the `./clones` directory that are ready to push up to GitHub.

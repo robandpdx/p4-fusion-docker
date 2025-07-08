@@ -1,6 +1,9 @@
 #!/bin/bash
 # This script will read the config.json and convert the p4 depots and branches to git
 
+# Exit immediately if any command exits with a non-zero status
+# set -e
+
 # if the clones directory does not exist, create it
 if [ ! -d "bare-clones" ]; then
     echo "Creating bare-clones directory..."
@@ -15,6 +18,8 @@ fi
 jq -c '.[]' config.json | while read -r depot; do
     DEPOT_PATH=$(echo "$depot" | jq -r '.depotPath')
     echo "Processing depot path: $DEPOT_PATH"
+    GITHUB_REPO_NAME=$(echo "$depot" | jq -r '.githubRepoName')
+    GITHUB_REPO_VISIBILITY=$(echo "$depot" | jq -r '.githubRepoVisibility')
 
     # DEPOT_PATH is "//project/stuff/gl-exporter/..." or "//gl-exporter/...". Parse out the depot name before "/..."
     # Extract everything after the last "//" up to the last "/..."
@@ -105,6 +110,20 @@ jq -c '.[]' config.json | while read -r depot; do
         git lfs migrate info --everything
     else
         echo "LFS is disabled for this depot. Skipping LFS migration."
+    fi
+
+
+    if [ -n "$GITHUB_REPO_NAME" ] && [ "$GITHUB_REPO_NAME" != "null" ]; then
+        echo "Creating GitHub repository: $GITHUB_ORG/$GITHUB_REPO_NAME"
+        # Create new repo in GitHub using gh cli
+        gh repo create "$GITHUB_ORG/$GITHUB_REPO_NAME" --"$GITHUB_REPO_VISIBILITY"
+        # Add github remote
+        echo "Pushing to GitHub repository: $GITHUB_ORG/$GITHUB_REPO_NAME"
+        git remote add github "https://github.com/$GITHUB_ORG/$GITHUB_REPO_NAME.git"
+        # Push repo to GitHub
+        git push --all github
+    else
+        echo "Skipping GitHub repository creation."
     fi
     
     cd ..

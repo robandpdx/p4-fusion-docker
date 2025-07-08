@@ -12,3 +12,6 @@ export LOOKAHEAD=1000
 export RETRIES=10
 export REFRESH=100
 export INCLUDE_BINARIES=true
+
+# GitHub configuration
+export GITHUB_ORG=""
