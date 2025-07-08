@@ -25,7 +25,9 @@ jq -c '.[]' config.json | while read -r depot; do
 
     # Get all branches for this depot
     BRANCHES=$(echo "$depot" | jq -r '.branchConfig[].branch')
-    
+    # get the first branch from the depot using jq
+    MAIN_BRANCH=$(echo "$depot" | jq -r '.branchConfig[0].branch')
+
     # Build the BRANCH_INCLUDE string
     for branch_name in $BRANCHES; do
         echo "Processing branch: $branch_name for depot: $DEPOT_PATH"
@@ -63,6 +65,10 @@ jq -c '.[]' config.json | while read -r depot; do
         BRANCH_NAME=${REF#refs/remotes/origin/}
         git branch --track ${BRANCH_NAME} ${REF}
     done
+
+    # Checkout the main branch
+    echo "Checking out main branch: $MAIN_BRANCH"
+    git checkout $MAIN_BRANCH
 
     # Check if LFS is enabled for this depot
     LFS_ENABLED=$(echo "$depot" | jq -r '.lfs')
